@@ -1,7 +1,7 @@
-﻿using IceCream.Model;
+﻿using System.Windows;
+
+using IceCream.Model;
 using IceCream.ViewModel;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace IceCream
 {
@@ -20,13 +20,13 @@ namespace IceCream
         }
 
 
-        private void LvSelectionChanged(object sender, SelectionChangedEventArgs args)
+        /*private void LvSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             var lv = sender as ListView;
             if (lv == null) return;
             SelectedStation = (Station)lv.SelectedItem;
             _viewModel.SelectedStation = SelectedStation;
-        }
+        }*/
 
         private readonly StationViewModel _viewModel;
         private Station SelectedStation;

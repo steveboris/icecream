@@ -1,37 +1,36 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 
+using IceCream.Interfaces;
 using IceCream.Model;
 
 namespace IceCream.ViewModel
 {
-    internal class StationViewModel : INotifyPropertyChanged
+    internal class StationViewModel : ViewModel, IViewModel
     {
-               
         public StationViewModel()
         {
+            // upload existing stations
             Load();
         }
 
         private void Load()
         {
             //Stations = fileWatcher.GetStation();
-            if (fileWatcher.GetStation() != null)
+            if (fileWatcher.GetStationsList() != null)
             {
-                foreach(Station station in fileWatcher.GetStation())
+                foreach (Station station in fileWatcher.GetStationsList())
                 {
                     _stationList.Add(station);
                 }
             }
-
-            NextStation();
-            fileWatcher.GetStation().CollectionChanged += StationViewModel_CollectionChanged;
+            // On collection changed
+            fileWatcher.GetStationsList().CollectionChanged += OnCollectionChanged;
         }
 
-        private void StationViewModel_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             foreach (Station station in e.NewItems)
             {
@@ -48,152 +47,193 @@ namespace IceCream.ViewModel
             ObservableCollection<Station> stations = new ObservableCollection<Station>();
 
             // First make a copy of the station that already exists before the new station
-            foreach (Station station in Stations)
+            foreach (Station station in StationList)
             {
-                stations.Add(station);  
+                stations.Add(station);
             }
             stations.Add(_station);
-             
+
             // Set the new value of the list
-            Stations = stations;
+            StationList = stations;
 
             // Notify new station added
-            NewStationText = string.Format("New Station added: {0}", _station.StationID);
+            //NewStationText = string.Format("New Station added: {0}", _station.StationID);
         }
 
-        public ObservableCollection<Station> Stations
+        public string StationID
+        { 
+            get
+            {
+                if (_currentSelectedStation != null)
+                    return _currentSelectedStation.StationID;
+
+                return string.Empty;
+            }
+            set
+            {
+                _currentSelectedStation.StationID = value;
+            } 
+        }
+
+        public string Date 
+        { 
+            get
+            {
+                if (_currentSelectedStation != null)
+                    return _currentSelectedStation.Date;
+
+                return string.Empty;
+            }
+            set
+            {
+                _currentSelectedStation.Date = value;
+            }
+        }
+
+        public int Target 
         {
-            get => _stationList;
+            get 
+            {
+                if (_currentSelectedStation != null)
+                    return _currentSelectedStation.Target;
+
+                return 0;
+            }
             set 
             {
-                _stationList = value;
-                OnPropertyChanged(nameof(Stations));
-            }
+                _currentSelectedStation.Target = value;
+            } 
         }
-        
-        /// <summary>
-        /// Calls when any property of the current selected station changed.
-        /// Compute the difference between the target and the variance to what color to be displayed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Station_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            Station st = sender as Station;
-            if (st != null)
+
+        public int Actual
+        { 
+            get
             {
-                var diff = ComputeDifference(st.Variance, st.Target);
+                if (_currentSelectedStation != null)
+                    return _currentSelectedStation.Actual;
 
-                if (diff == 2)
-                    _color = RED;
-                else if (diff == 1)
-                    _color = GREEN;
-                else
-                    _color = "";
+                return 0;
+            }
+            set
+            {
+                _currentSelectedStation.Actual = value;
 
-                Color = _color;
+                // If actual has changed, the variance needs to be updated as well.
+                OnPropertyChanged(nameof(Actual));
+                UpdateOnActualValueChanged();
             }
         }
 
-        public void NextStation()
-        {
-            if (_stationList.Count > 0)
+        public int Variance
+        { 
+            get
             {
-                if (SelectedStation == null)
-                    SelectedStation = _stationList[0];
+                if (_currentSelectedStation != null)
+                    return _currentSelectedStation.Actual - _currentSelectedStation.Target;
 
-                int index = _stationList.IndexOf(_stationList.First(s => s.StationID == SelectedStation.StationID));
-                if (index < _stationList.Count)
+                return 0;
+            } 
+            set
+            {
+                _currentSelectedStation.Variance = value;
+                OnPropertyChanged(nameof(Variance));
+            }
+        }
+
+
+        public string Color 
+        { 
+            get
+            {
+                if (_currentSelectedStation != null)
                 {
-                    SelectedStation = _stationList[index];
-                    SetCurrentStation();
+                    var diff = ComputeDifference(Variance, Target);
+
+                    if (diff == 1)
+                        _color = ColorTypes.Red;
+                    else if (diff == 2)
+                        _color = ColorTypes.Green;
+                    else
+                        _color = ColorTypes.Black;
+
+                    return _color;
                 }
+
+                return string.Empty;
+            }
+            set
+            {
+                SetProperty(ref _color, value);
+                OnPropertyChanged(nameof(Variance));
             }
         }
 
-        public void SetCurrentStation()
-        {
-            ICollectionView view = CollectionViewSource.GetDefaultView(_stationList);
-            if (view != null)
-                view.MoveCurrentTo(SelectedStation);
+        public string StationAddedText 
+        { 
+            get
+            {
+                if (_currentSelectedStation != null)
+                    return _notification;
+
+                return string.Empty;
+            } 
+            set
+            {
+                SetProperty(ref _notification, value);
+            }
         }
 
-        private int ComputeDifference(int variance, int target)
+        public Station CurrentSelectedStation
         {
-            if (target < 0) target = -target;
-
-            if (variance >= (target * 10/100))
+            get => _currentSelectedStation;
+            set
             {
-                // if the diff is 10% or more below the target
+                //_currentSelectedStation = value;
+                SetProperty(ref _currentSelectedStation, value);
+
+                // If the selection has changed, the others fields needs to be updated as well 
+                UpdateSelectedStationChanged();
+            }
+        }
+
+        public void UpdateSelectedStationChanged()
+        {
+            OnPropertyChanged(nameof(StationID));
+            OnPropertyChanged(nameof(Target));
+        }
+
+        public void UpdateOnActualValueChanged()
+        {
+            OnPropertyChanged(nameof(Variance));
+            OnPropertyChanged(nameof(Color));
+        }
+
+        public ObservableCollection<Station> StationList 
+        {
+            get => _stationList;
+            set
+            {
+                _stationList = value;
+                OnPropertyChanged(nameof(StationList));
+            }
+        }
+
+        public int ComputeDifference(int variance, int target)
+        {
+            if (variance <= (target * 10 / 100))
                 return 1;
-            }
-            else if (variance <= (target * 5/100))
-            {
-                // if the diff is 5% or more above the target
-                return 2;
-            }
 
-            // otherwise
+            else if (variance >= (-target * 5 / 100))
+                return 2;
+
             return 0;
         }
 
-        public string Color
-        {
-            get
-            { 
-                return _color;
-            }
-            set
-            {
-                _color = value;
-                OnPropertyChanged(nameof(Color));
-            }
-        }
-
-        public Station SelectedStation
-        {
-            get => _selectedStation;
-            set
-            {
-                if (_selectedStation != value)
-                    _selectedStation = value;
-
-                // reset the default color
-                Color = RED;
-                // reset the notification text station added
-                NewStationText = string.Empty;
-                _selectedStation.PropertyChanged += Station_PropertyChanged;
-                //OnPropertyChanged(nameof(SelectedStation));
-                //OnPropertyChanged(nameof(Color));
-            }
-        }
-
-        public string NewStationText
-        {
-            get => _text;
-            set
-            {
-                _text = value;
-;                OnPropertyChanged(nameof(NewStationText));
-            }
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        FileWatcher fileWatcher = new FileWatcher();
+        // Properties
+        private string _notification;
+        private string _color;
+        private Station _currentSelectedStation;
         private ObservableCollection<Station> _stationList = new ObservableCollection<Station>();
-        private Station _selectedStation;
-
-        private string _color = RED;
-        const string RED = "#FF0000";
-        const string GREEN = "#00FF00";
-        string _text = "";
+        FileWatcher fileWatcher = new FileWatcher();
     }
 }
