@@ -40,11 +40,6 @@ namespace IceCream.Interfaces
         public string Color { get; set; }
 
         /// <summary>
-        /// Binding Property. Text to be display when a new station has been added.
-        /// </summary>
-        public string StationAddedText { get; set; }
-
-        /// <summary>
         /// This property is a binding element, that has to be added into the view file. 
         /// This will help to save the current selected Station from the list.
         /// </summary>
@@ -82,15 +77,5 @@ namespace IceCream.Interfaces
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e);
-
-        /// <summary>
-        /// Calls this method to notify users when a new station has been added.
-        /// </summary>
-        void NotifyOnStationAdded();
-
-        /// <summary>
-        /// Clears notification on station changed.
-        /// </summary>
-        void ClearNotification();
     }
 }

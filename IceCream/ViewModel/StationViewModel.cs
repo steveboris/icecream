@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 using IceCream.Interfaces;
 using IceCream.Model;
@@ -37,6 +37,8 @@ namespace IceCream.ViewModel
                 // Add the station to the display
                 UpdateViewModel(station);
             }
+            // Notify station added
+            MessageBox.Show("New Station added! ID: " + _stationList.Last().StationID);
         }
 
         /// <summary>
@@ -55,9 +57,6 @@ namespace IceCream.ViewModel
                 stations.Add(station);
             }
             stations.Add(_station);
-
-            // notifiy
-            NotifyOnStationAdded();
             // Set the new value of the list
             StationList = stations;
         }
@@ -169,18 +168,6 @@ namespace IceCream.ViewModel
             }
         }
 
-        public string StationAddedText 
-        { 
-            get
-            {
-                return _notification;
-            } 
-            set
-            {
-                SetProperty(ref _notification, value);
-            }
-        }
-
         public Station CurrentSelectedStation
         {
             get => _currentSelectedStation;
@@ -191,9 +178,6 @@ namespace IceCream.ViewModel
 
                 // If the selection has changed, the others fields needs to be updated as well 
                 UpdateSelectedStationChanged();
-
-                // Clear notification text
-                ClearNotification();
             }
         }
 
@@ -228,19 +212,6 @@ namespace IceCream.ViewModel
                 return 2;
 
             return 0;
-        }
-
-        public void NotifyOnStationAdded()
-        {
-            // Notify new station added
-            StationAddedText = string.Format("New Station added! ID: {0}", StationList.ToList().Last().StationID);
-            OnPropertyChanged(nameof(StationAddedText));
-        }
-
-        public void ClearNotification()
-        {
-            StationAddedText = string.Empty;
-            OnPropertyChanged(nameof(StationAddedText));
         }
 
         // Properties

@@ -40,3 +40,5 @@ C:\Users\Steve\Desktop\icecream\IceCream\obj\Debug\net6.0-windows\IceCream.Assem
 C:\Users\Steve\Desktop\icecream\IceCream\obj\Debug\net6.0-windows\IceCream.AssemblyInfo.cs
 C:\Users\Steve\Desktop\icecream\IceCream\obj\Debug\net6.0-windows\IceCream.csproj.CoreCompileInputs.cache
 C:\Users\Steve\Desktop\icecream\IceCream\obj\Debug\net6.0-windows\IceCream.genruntimeconfig.cache
+D:\Projets\C#\WPF\IceCream\IceCream\obj\Debug\net6.0-windows\Monitor.g.cs
+D:\Projets\C#\WPF\IceCream\IceCream\obj\Debug\net6.0-windows\Monitor.baml

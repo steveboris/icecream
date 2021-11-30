@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace IceCream
 {
@@ -13,5 +7,16 @@ namespace IceCream
     /// </summary>
     public partial class App : Application
     {
-    }
+		private void Application_Startup(object sender, StartupEventArgs e)
+		{
+			// Create the startup window
+			MainWindow wnd = new MainWindow();
+			wnd.Title = "Monitor 1";
+			Monitor monitor = new Monitor();
+			monitor.Title = "Monitor 2";
+			// Show the window
+			wnd.Show();
+			monitor.Show();
+		}
+	}
 }
