@@ -7,7 +7,7 @@ using IceCream.Model;
 
 namespace IceCream.ViewModel
 {
-    public class StationViewModel : ViewModel, IViewModel
+    public class StationViewModel : ViewModelBase, IViewModel
     {
         public StationViewModel()
         {
@@ -15,19 +15,13 @@ namespace IceCream.ViewModel
             Load();
         }
 
+        /// <summary>
+        /// Loads station from the file and starts watching on changed.
+        /// </summary>
         private void Load()
         {
-            //Stations = fileWatcher.GetStation();
-            if (fileWatcher.GetStationsList() != null)
-            {
-                foreach (Station station in fileWatcher.GetStationsList())
-                {
-                    _stationList.Add(station);
-                }
-            }
-
-            // On collection changed
-            fileWatcher.GetStationsList().CollectionChanged += OnCollectionChanged;
+           StationList = _stationCollection.Stations();
+           _stationCollection.Stations().CollectionChanged += OnCollectionChanged;
         }
 
         public void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -150,11 +144,11 @@ namespace IceCream.ViewModel
                     var diff = ComputeDifference(Variance, Target);
 
                     if (diff == 1)
-                        _color = ColorTypes.Red;
+                        _color = color.Red;
                     else if (diff == 2)
-                        _color = ColorTypes.Green;
+                        _color = color.Green;
                     else
-                        _color = ColorTypes.Black;
+                        _color = color.Black;
 
                     return _color;
                 }
@@ -215,10 +209,10 @@ namespace IceCream.ViewModel
         }
 
         // Properties
-        private string _notification;
+        private IStationCollection _stationCollection = new StationCollection();
+        private IColor color = new ColorTypes();
         private string _color;
         private Station _currentSelectedStation;
         private ObservableCollection<Station> _stationList = new ObservableCollection<Station>();
-        FileWatcher fileWatcher = new FileWatcher();
     }
 }
