@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -10,9 +9,9 @@ using IceCream.Model;
 
 namespace IceCream
 {
-    internal class FileWatcher
+    public class FileWatcher
     {
-        private string Path = @"C:\Users\Steve\Desktop\";
+        private string Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public FileWatcher()
         {
             fileSystemWatcher = new FileSystemWatcher();
@@ -26,9 +25,6 @@ namespace IceCream
                                              NotifyFilters.DirectoryName;
             
             fileSystemWatcher.Changed += OnChanged;
-            fileSystemWatcher.Created += OnCreated;
-            fileSystemWatcher.Deleted += OnDeleted;
-            fileSystemWatcher.Renamed += OnRenamed;
             fileSystemWatcher.Error += OnError;
 
             fileSystemWatcher.EnableRaisingEvents = true;
@@ -52,54 +48,45 @@ namespace IceCream
                 return;
             }
 
-            FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read);
-
-            string line = String.Empty;
-            using (var sr = new StreamReader(fs, Encoding.UTF8))
+            try
             {
-                while ((line = sr.ReadLine()) != null)
+                FileStream fs = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read);
+
+                string line = String.Empty;
+                using (var sr = new StreamReader(fs, Encoding.UTF8))
                 {
-                    Trace.WriteLine(line);
-
-                    string[] parts = line.Split(',');
-
-                    try
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        int target = int.Parse(parts[1]);
-                        if (parts.Length == 2)
-                        {
-                            // add new station if it is not already exists
-                            var stationExists = _stations.FirstOrDefault(x => x.StationID == parts[0] && x.Target == target);
-                            if (stationExists == null)
-                                _stations.Add(new Station()
-                                {
-                                    StationID = parts[0],
-                                    Target = target
-                                });
+                        Trace.WriteLine(line);
 
-                            GetStationsList();
+                        string[] parts = line.Split(',');
+
+                        try
+                        {
+                            int target = int.Parse(parts[1]);
+                            if (parts.Length == 2)
+                            {
+                                // add new station if it is not already exists
+                                var stationExists = _stations.FirstOrDefault(x => x.StationID == parts[0] && x.Target == target);
+                                if (stationExists == null)
+                                    _stations.Add(new Station()
+                                    {
+                                        StationID = parts[0],
+                                        Target = target
+                                    });
+
+                                GetStationsList();
+                            }
                         }
+                        catch { }
                     }
-                    catch { }
                 }
             }
+            catch(Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
 
-        }
-
-        private void OnCreated(object sender, FileSystemEventArgs e)
-        {
-            string value = $"Created: {e.FullPath}";
-            Trace.WriteLine(value);
-        }
-
-        private void OnDeleted(object sender, FileSystemEventArgs e) =>
-            Trace.WriteLine($"Deleted: {e.FullPath}");
-
-        private void OnRenamed(object sender, RenamedEventArgs e)
-        {
-            Trace.WriteLine($"Renamed:");
-            Trace.WriteLine($"    Old: {e.OldFullPath}");
-            Trace.WriteLine($"    New: {e.FullPath}");
         }
 
         private void OnError(object sender, ErrorEventArgs e) =>

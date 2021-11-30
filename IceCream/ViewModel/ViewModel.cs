@@ -7,7 +7,7 @@ namespace IceCream.ViewModel
     /// <summary>
     /// The viewModel class that all viewModel will use.
     /// </summary>
-    internal class ViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged
     {
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

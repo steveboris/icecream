@@ -1,6 +1,6 @@
 ﻿namespace IceCream.Model
 {
-    internal class ColorTypes
+    public class ColorTypes
     {
         public const string Red = "#FF0000"; 
         public const string Green = "#00FF00";

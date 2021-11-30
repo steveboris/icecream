@@ -1,14 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 
 using IceCream.Interfaces;
 using IceCream.Model;
 
 namespace IceCream.ViewModel
 {
-    internal class StationViewModel : ViewModel, IViewModel
+    public class StationViewModel : ViewModel, IViewModel
     {
         public StationViewModel()
         {
@@ -26,14 +25,16 @@ namespace IceCream.ViewModel
                     _stationList.Add(station);
                 }
             }
+
             // On collection changed
             fileWatcher.GetStationsList().CollectionChanged += OnCollectionChanged;
         }
 
-        private void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        public void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             foreach (Station station in e.NewItems)
             {
+                // Add the station to the display
                 UpdateViewModel(station);
             }
         }
@@ -41,7 +42,9 @@ namespace IceCream.ViewModel
         /// <summary>
         /// Update the Data in the list
         /// </summary>
-        /// <param name="_station"></param>
+        /// <param name="_station">
+        /// The current station to be displayed
+        /// </param>
         private void UpdateViewModel(Station _station)
         {
             ObservableCollection<Station> stations = new ObservableCollection<Station>();
@@ -53,11 +56,10 @@ namespace IceCream.ViewModel
             }
             stations.Add(_station);
 
+            // notifiy
+            NotifyOnStationAdded();
             // Set the new value of the list
             StationList = stations;
-
-            // Notify new station added
-            //NewStationText = string.Format("New Station added: {0}", _station.StationID);
         }
 
         public string StationID
@@ -140,7 +142,6 @@ namespace IceCream.ViewModel
             }
         }
 
-
         public string Color 
         { 
             get
@@ -172,10 +173,7 @@ namespace IceCream.ViewModel
         { 
             get
             {
-                if (_currentSelectedStation != null)
-                    return _notification;
-
-                return string.Empty;
+                return _notification;
             } 
             set
             {
@@ -193,6 +191,9 @@ namespace IceCream.ViewModel
 
                 // If the selection has changed, the others fields needs to be updated as well 
                 UpdateSelectedStationChanged();
+
+                // Clear notification text
+                ClearNotification();
             }
         }
 
@@ -227,6 +228,19 @@ namespace IceCream.ViewModel
                 return 2;
 
             return 0;
+        }
+
+        public void NotifyOnStationAdded()
+        {
+            // Notify new station added
+            StationAddedText = string.Format("New Station added! ID: {0}", StationList.ToList().Last().StationID);
+            OnPropertyChanged(nameof(StationAddedText));
+        }
+
+        public void ClearNotification()
+        {
+            StationAddedText = string.Empty;
+            OnPropertyChanged(nameof(StationAddedText));
         }
 
         // Properties

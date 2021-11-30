@@ -7,7 +7,7 @@ namespace IceCream.Interfaces
     /// <summary>
     /// Interface that will implement the Views
     /// </summary>
-    internal interface IViewModel
+    public interface IViewModel
     {
         /// <summary>
         /// Binding Property. Where the value of the Stationid will be displayed.
@@ -77,11 +77,20 @@ namespace IceCream.Interfaces
         int ComputeDifference(int variance, int target);
 
         /// <summary>
-        /// Read available stations from a local file.
+        /// Calls this method when the selection changed. This has to be connect with the collection
         /// </summary>
-        /// <param name="stationCollection">
-        /// Class that read and returns the list of stations from the local file.
-        /// </param>
-        //void DisplayStations();
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e);
+
+        /// <summary>
+        /// Calls this method to notify users when a new station has been added.
+        /// </summary>
+        void NotifyOnStationAdded();
+
+        /// <summary>
+        /// Clears notification on station changed.
+        /// </summary>
+        void ClearNotification();
     }
 }

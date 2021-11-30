@@ -1,6 +1,6 @@
 ﻿namespace IceCream.Model
 {
-    internal class Station
+    public class Station
     {
         public string StationID { get; set; }
 
