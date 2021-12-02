@@ -144,11 +144,11 @@ namespace IceCream.ViewModel
                     var diff = ComputeDifference(Variance, Target);
 
                     if (diff == 1)
-                        _color = color.Red;
+                        _color = RED;
                     else if (diff == 2)
-                        _color = color.Green;
+                        _color = GREEN;
                     else
-                        _color = color.Black;
+                        _color = BLACK;
 
                     return _color;
                 }
@@ -210,9 +210,11 @@ namespace IceCream.ViewModel
 
         // Properties
         private IStationCollection _stationCollection = new StationCollection();
-        private IColor color = new ColorTypes();
         private string _color;
         private Station _currentSelectedStation;
         private ObservableCollection<Station> _stationList = new ObservableCollection<Station>();
+        private const string RED = "#FF0000";
+        private const string GREEN = "#00FF00";
+        private const string BLACK = "#3e3e3e";
     }
 }
