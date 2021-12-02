@@ -4,7 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace IceCream.ViewModel
 {
-    internal class ViewModelBase : INotifyPropertyChanged
+    /// <summary>
+    /// The viewModel class that all viewModel will use.
+    /// </summary>
+    public class ViewModelBase : INotifyPropertyChanged
     {
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -15,7 +18,9 @@ namespace IceCream.ViewModel
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))
                 return false;
+
             storage = value;
+
             this.OnPropertyChanged(propertyName);
             return true;
         }

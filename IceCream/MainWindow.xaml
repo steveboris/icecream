@@ -16,7 +16,7 @@
             
             <!-- First column-->
             <StackPanel>
-                <ListView SelectionChanged="LvSelectionChanged" Name="StationGrid" Margin="1,0,1,1" ItemsSource="{Binding Stations}" IsSynchronizedWithCurrentItem="True">
+                <ListView Name="StationGrid" Margin="1,0,1,1" ItemsSource="{Binding StationList}" SelectedItem="{Binding CurrentSelectedStation}" IsSynchronizedWithCurrentItem="True">
                     <ListView.View>
                         <GridView x:Name="grdTest">
                             <GridViewColumn Header="Stations" DisplayMemberBinding="{Binding StationID}"  Width="161"/>
@@ -44,21 +44,21 @@
                     
                     <!--Inputs-->
                     <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="Station ID:" HorizontalAlignment="Left"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Margin="4" Text="{Binding ElementName=StationGrid,Path=SelectedItem.StationID, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="180"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Margin="4" Text="{Binding StationID}" HorizontalAlignment="Left" Width="180" IsEnabled="False"/>
                     
                     <Label Grid.Column="0" Grid.Row="2" Margin="4" Content="Date:" HorizontalAlignment="Left"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Margin="4" Text="{Binding ElementName=StationGrid,Path=SelectedItem.Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="180"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Margin="4" Text="{Binding Date}" HorizontalAlignment="Left" Width="180"/>
                     
                     <Label Grid.Column="0" Grid.Row="3" Margin="4" Content="Target:" HorizontalAlignment="Left"/>
-                    <TextBox Grid.Column="1" Grid.Row="3" Margin="4" Text="{Binding ElementName=StationGrid,Path=SelectedItem.Target}" HorizontalAlignment="Left" Width="180" IsEnabled="False"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Margin="4" Text="{Binding Target}" HorizontalAlignment="Left" Width="180" IsEnabled="False"/>
 
                     <Label Grid.Column="0" Grid.Row="4" Margin="4" Content="Actual:" HorizontalAlignment="Left"/>
-                    <TextBox Grid.Column="1" Grid.Row="4" Margin="4" Text="{Binding ElementName=StationGrid,Path=SelectedItem.Actual, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="180"/>
+                    <TextBox Grid.Column="1" Grid.Row="4" Margin="4" Text="{Binding Actual, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="180"/>
 
                     <Label Grid.Column="0" Grid.Row="5" Margin="4" Content="Variance:" HorizontalAlignment="Left"/>
-                    <TextBox Foreground="{Binding Color}" Grid.Column="1" Grid.Row="5" Margin="4" Text="{Binding ElementName=StationGrid,Path=SelectedItem.Variance}" HorizontalAlignment="Left" Width="180" IsEnabled="False"/>
+                    <TextBox Foreground="{Binding Color, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="5" Margin="4" Text="{Binding Variance, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="180" IsEnabled="False"/>
 
-                    <Label Grid.Column="1" Grid.Row="6" Margin="0 25 0 0" Content="{Binding NewStationText}" HorizontalAlignment="Left"  Foreground="#00FF00"/>
+                    <Label Grid.Column="1" Grid.Row="6" Margin="0 25 0 0" Content="{Binding StationAddedText, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"  Foreground="#00FF00"/>
                 </Grid>
             </StackPanel>
         </Grid>
