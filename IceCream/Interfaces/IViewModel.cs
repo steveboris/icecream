@@ -10,36 +10,6 @@ namespace IceCream.Interfaces
     public interface IViewModel
     {
         /// <summary>
-        /// Binding Property. Where the value of the Stationid will be displayed.
-        /// </summary>
-        public string StationID { get; set; }
-
-        /// <summary>
-        /// Binding Property. Where the value of the date will be displayed.
-        /// </summary>
-        public string Date { get; set; }
-
-        /// <summary>
-        /// Binding Property. Where the value of the target will be displayed.
-        /// </summary>
-        public int Target { get; set; }
-
-        /// <summary>
-        /// Binding Property. Where the value of the actual will be displayed.
-        /// </summary>
-        public int Actual { get; set; }
-
-        /// <summary>
-        /// Binding Property. Where the value of the variance will be displayed.
-        /// </summary>
-        public int Variance { get; set; }
-
-        /// <summary>
-        /// Binding Property. This will be used to highlight the value of the variance. 
-        /// </summary>
-        public string Color { get; set; }
-
-        /// <summary>
         /// This property is a binding element, that has to be added into the view file. 
         /// This will help to save the current selected Station from the list.
         /// </summary>

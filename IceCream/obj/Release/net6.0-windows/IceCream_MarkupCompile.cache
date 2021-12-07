@@ -1,20 +1,20 @@
 ﻿IceCream
-1.0.0.0
+
 
 winexe
 C#
 .cs
-C:\Users\Thefutur\Source\Repos\icecream\IceCream\obj\Debug\net6.0-windows\
+C:\Users\Thefutur\Source\Repos\icecream\IceCream\obj\Release\net6.0-windows\
 IceCream
 none
 false
-TRACE;DEBUG;NET;NET6_0;NETCOREAPP
+TRACE;RELEASE;NET;NET6_0;NETCOREAPP
 C:\Users\Thefutur\Source\Repos\icecream\IceCream\App.xaml
 21987528681
 
-131814393318
+11-163000410
 194-164764702
 MainWindow.xaml;Monitor.xaml;
 
-False
+True
 

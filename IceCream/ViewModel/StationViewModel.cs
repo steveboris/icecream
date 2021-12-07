@@ -26,13 +26,17 @@ namespace IceCream.ViewModel
 
         public void OnCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            foreach (Station station in e.NewItems)
+            var stations = e.NewItems;
+            if (stations != null)
             {
-                // Add the station to the display
-                UpdateViewModel(station);
+                foreach (Station station in stations)
+                {
+                    // Add the station to the display
+                    UpdateViewModel(station);
+                }
+                // Notify station added
+                MessageBox.Show("New Station added! ID: " + _stationList.Last().StationID);
             }
-            // Notify station added
-            MessageBox.Show("New Station added! ID: " + _stationList.Last().StationID);
         }
 
         /// <summary>
@@ -167,9 +171,7 @@ namespace IceCream.ViewModel
             get => _currentSelectedStation;
             set
             {
-                //_currentSelectedStation = value;
                 SetProperty(ref _currentSelectedStation, value);
-
                 // If the selection has changed, the others fields needs to be updated as well 
                 UpdateSelectedStationChanged();
             }
@@ -179,6 +181,8 @@ namespace IceCream.ViewModel
         {
             OnPropertyChanged(nameof(StationID));
             OnPropertyChanged(nameof(Target));
+            OnPropertyChanged(nameof(Actual));
+            OnPropertyChanged(nameof(Variance));
         }
 
         public void UpdateOnActualValueChanged()

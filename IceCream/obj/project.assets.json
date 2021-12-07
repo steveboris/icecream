@@ -8,24 +8,19 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Steve\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Thefutur\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projets\\C#\\WPF\\icecream\\IceCream\\IceCream.csproj",
+      "projectUniqueName": "C:\\Users\\Thefutur\\Source\\Repos\\icecream\\IceCream\\IceCream.csproj",
       "projectName": "IceCream",
-      "projectPath": "D:\\Projets\\C#\\WPF\\icecream\\IceCream\\IceCream.csproj",
-      "packagesPath": "C:\\Users\\Steve\\.nuget\\packages\\",
-      "outputPath": "D:\\Projets\\C#\\WPF\\icecream\\IceCream\\obj\\",
+      "projectPath": "C:\\Users\\Thefutur\\Source\\Repos\\icecream\\IceCream\\IceCream.csproj",
+      "packagesPath": "C:\\Users\\Thefutur\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Thefutur\\Source\\Repos\\icecream\\IceCream\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Steve\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Thefutur\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
